@@ -7,3 +7,4 @@ Esta app muestra como puedes usar el componente [streamlit-aggrid](STREAMLIT_AGG
     
 <img src ="https://user-images.githubusercontent.com/7164864/152407708-1f3394bd-a683-4520-8677-c94e3872bb22.png" width="400px"></img>
 
+.
