@@ -7,15 +7,14 @@ STREAMLIT_AGGRID_URL = "https://github.com/PablocFonseca/streamlit-aggrid"
 st.set_page_config(
     layout="centered", page_icon="🖱️", page_title="Interactive table app"
 )
-st.title("🖱️ Interactive table app")
+st.title("🖱️ Aplicacion de Tabla Interactiva")
 st.write(
-    """This app shows how you can use the [streamlit-aggrid](STREAMLIT_AGGRID_URL) 
-    Streamlit component in an interactive way so as to display additional content 
-    based on user click."""
+    """ Esta app muestra como puedes usar el componente [streamlit-aggrid](STREAMLIT_AGGRID_URL)
+    de Streamlit de forma interactiva de acuerdo a lo que el usuario seleccione."""
 )
 
 
-st.write("Go ahead, click on a row in the table below!")
+st.write("Prueba y haz click sobre cualquier fila de la tabla")
 
 
 def aggrid_interactive_table(df: pd.DataFrame):
@@ -38,7 +37,7 @@ def aggrid_interactive_table(df: pd.DataFrame):
         df,
         enable_enterprise_modules=True,
         gridOptions=options.build(),
-        theme="light",
+        theme="alpine",
         update_mode=GridUpdateMode.MODEL_CHANGED,
         allow_unsafe_jscode=True,
     )
@@ -46,8 +45,8 @@ def aggrid_interactive_table(df: pd.DataFrame):
     return selection
 
 
-iris = pd.read_csv(
-    "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv"
+iris = pd.read_excel("datos_suspensiones_sankey_bd.xlsx"
+    
 )
 
 selection = aggrid_interactive_table(df=iris)
