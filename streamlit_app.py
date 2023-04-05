@@ -7,6 +7,7 @@ from streamlit_option_menu import option_menu
 import streamlit_nested_layout as stn
 import plotly.express as px
 from streamlit_elements import elements, mui, html
+import hydralit_components as hc
 
 st.set_page_config(layout = "wide")
 # 1. as sidebar menu
@@ -45,17 +46,18 @@ elif selected =="Reporte quirófanos":
             "series": [{"data": [820, 932, 901, 934, 1290, 1330, 1320],
                         "type": "line"}],
              "title": ["titulo"]}
-    iris = pd.read_excel("datos_suspensiones_sankey_bd.xlsx")
+    datos = pd.read_excel("datos/set_de_datos_1.xlsx",sheet_name="Horas",usecols="E:G",skiprows=14,nrows=22,header=0,names=["Mes","Tipo de Hora","Valor"])
     
+
     fig = px.bar(
-    iris,
-    y="target",
-    x="value",
+    datos,
+    x="Mes",
+    y="Valor",
     height=700,
-    orientation="h")
-    fig.update_layout(title="GDP per Capita vs. Life Expectancy")
+    orientation="v")
+    fig.update_layout(title="Utilización de quirofanos")
     
-    col_report_1,col_report_2=st.columns([4,1],gap="small")  
+    col_report_1,col_report_2=st.columns([4,2],gap="small")  
     
     with col_report_1:
        
@@ -65,9 +67,9 @@ elif selected =="Reporte quirófanos":
  
              
     with col_report_2:
-        st.write("tarjeta 1")   
-        st.write("tarjeta 2")
-        st.write("tarjeta 3")
+        st.metric(label="Promedio porcentaje de ocupación de quirófanos",value="60%",label_visibility="visible")  
+        st.metric(label="Horas programadas respecto a las habilidades",value="79%")  
+        st.metric(label="Horas ocupadas respecto a las programadas",value="80%")  
 elif selected =="Suspensiones por causa":
     col1,col2=st.columns(2,gap="small")    
     with col1:
