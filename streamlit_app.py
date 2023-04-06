@@ -37,15 +37,7 @@ if selected == "Inicio":
             st.button(label="Dias de estadia")
     
 elif selected =="Reporte quirófanos":
-    option = {
-            "xAxis": {
-                "type": "category",
-                "data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            },
-            "yAxis": {"type": "value"},
-            "series": [{"data": [820, 932, 901, 934, 1290, 1330, 1320],
-                        "type": "line"}],
-             "title": ["titulo"]}
+    
     datos = pd.read_excel("datos/set_de_datos_1.xlsx",sheet_name="Horas",usecols="E:G",skiprows=14,nrows=22,header=0,names=["Mes","Tipo de Hora","Valor"])
     
 
@@ -70,7 +62,9 @@ elif selected =="Reporte quirófanos":
         st.metric(label="Promedio porcentaje de ocupación de quirófanos",value="60%",label_visibility="visible")  
         st.metric(label="Horas programadas respecto a las habilidades",value="79%")  
         st.metric(label="Horas ocupadas respecto a las programadas",value="80%")  
+
 elif selected =="Suspensiones por causa":
+
     col1,col2=st.columns(2,gap="small")    
     with col1:
 
@@ -155,18 +149,124 @@ elif selected =="Suspensiones por causa":
         }
         ste.st_echarts(key=3,
             options=option, height="400px")
-        
-else:
+               
+elif selected =="Suspensiones por Especialidad":
     col1, col2, col3 = st.columns(3)
 
-    with col1:
-        st.header("A cat")
-        st.image("https://static.streamlit.io/examples/cat.jpg")
 
-    with col2:
-        st.header("A dog")
-        st.image("https://static.streamlit.io/examples/dog.jpg")
+elif selected =="Hospitalización domiciliaria":
+    
+    
 
-    with col3:
-        st.header("An owl")
-        st.image("https://static.streamlit.io/examples/owl.jpg")       
+    datos = pd.read_excel("datos/datos_hospitalizacion_domiciliaria.xlsx",sheet_name="Sheet1",usecols="A:C",skiprows=0,nrows=12,header=0)
+    
+
+    fig = px.bar(
+    datos,
+    x="Componentes",
+    y=["Número cupos programados","Número cupos utilizados"],
+    height=700,
+    orientation="v",
+    barmode="group")
+    fig.update_layout(title="Hospitalización domiciliaria")
+    
+    col_report_1,col_report_2=st.columns([4,2],gap="small")  
+    
+    with col_report_1:
+       
+        #ste.st_echarts(key=1,options=option, height="400px")
+        st.plotly_chart(fig, use_container_width=True)
+
+ 
+             
+    with col_report_2:
+        st.metric(label="Promedio porcentaje de ocupación de quirófanos",value="60%",label_visibility="visible")  
+        st.metric(label="Horas programadas respecto a las habilidades",value="79%")  
+        st.metric(label="Horas ocupadas respecto a las programadas",value="80%")  
+
+elif selected =="Días de estadia":
+
+    with st.empty():
+
+        datos_1 = pd.read_excel("datos/datos_dias_estada.xlsx",sheet_name="Hoja1",usecols="A,B,C,D,I",skiprows=0,nrows=168,header=0)
+                
+
+        col_report_1,col_report_2=st.columns([4,2],gap="small")  
+            
+        with col_report_2:
+            selector_1=st.selectbox("Selección de especialidad",("CIRUGÍA GENERAL",
+                                                    "CIRUGÍA CARDIOVASCULAR",
+                                                    "CIRUGÍA MÁXILOFACIAL",
+                                                    "CIRUGÍA TÓRAX",
+                                                    "TRAUMATOLOGÍA",
+                                                    "NEUROCIRUGÍA",
+                                                    "OTORRINOLARINGOLOGÍA",
+                                                    "OFTALMOLOGÍA","OBSTETRICIA Y GINECOLOGÍA","GINECOLOGÍA",
+                                                    "UROLOGÍA","RESTO ESPECIALIDADES","TODAS"))
+
+                
+            st.metric(label="Promedio porcentaje de ocupación de quirófanos",value="60%",label_visibility="visible")  
+            st.metric(label="Horas programadas respecto a las habilidades",value="79%")  
+            st.metric(label="Horas ocupadas respecto a las programadas",value="80%")
+        
+        with col_report_1:
+            datos_1 = datos_1[(datos_1['Especialidad']==selector_1)]
+            
+
+            fig_1 = px.bar(
+            datos_1,
+            x="Mes",
+            y=["Dias de estada prequirurgicos totales","Pacientes intervenidos totales,"],
+            height=700,
+            orientation="v",
+            barmode="group")
+            fig_1.update_layout(title="Días de estadia y pacientes intervenidos por mes")
+
+           
+
+            st.plotly_chart(fig_1, use_container_width=True)
+            
+            
+    with st.empty():
+
+        
+        datos_2 = pd.read_excel("datos/datos_dias_estada.xlsx",sheet_name="Hoja1",usecols="A,B,C,D,I",skiprows=0,nrows=168,header=0)
+
+        
+
+        col_report_1,col_report_2=st.columns([4,2],gap="small")  
+            
+        with col_report_2:
+            
+            selector_2=st.selectbox("Selección de mes",("enero","febrero","marzo",
+                                                    "abril","mayo","junio","julio",
+                                                    "agosto","septiembre","octubre",
+                                                    "noviembre","diciembre"))
+
+                
+            st.metric(label="Promedio porcentaje de ocupación de quirófanos",value="60%",label_visibility="visible")  
+            st.metric(label="Horas programadas respecto a las habilidades",value="79%")  
+            st.metric(label="Horas ocupadas respecto a las programadas",value="80%")
+            
+               
+            
+    with col_report_1:
+        
+
+        datos_2 = datos_2[(datos_2['Mes']==selector_2)]
+
+        fig_2 = px.bar(
+        datos_2,
+        x="Especialidad",
+        y=["Dias de estada prequirurgicos totales","Pacientes intervenidos totales,"],
+        height=700,
+        orientation="v",
+        barmode="group")
+        fig_2.update_layout(title="Días de estadia y pacientes intervenidos por mes")
+
+       
+        st.plotly_chart(fig_2, use_container_width=True)
+            
+
+else:
+    col1, col2, col3 = st.columns(3)
