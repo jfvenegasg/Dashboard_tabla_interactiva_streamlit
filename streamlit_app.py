@@ -190,7 +190,6 @@ elif selected =="Días de estadia":
 
         datos_1 = pd.read_excel("datos/datos_dias_estada.xlsx",sheet_name="Hoja1",usecols="A,B,C,D,I",skiprows=0,nrows=168,header=0)
                 
-
         col_report_1,col_report_2=st.columns([4,2],gap="small")  
             
         with col_report_2:
@@ -210,8 +209,7 @@ elif selected =="Días de estadia":
             st.metric(label="Horas ocupadas respecto a las programadas",value="80%")
         
         with col_report_1:
-            datos_1 = datos_1[(datos_1['Especialidad']==selector_1)]
-            
+            datos_1 = datos_1[(datos_1['Especialidad']==selector_1)]         
 
             fig_1 = px.bar(
             datos_1,
@@ -220,9 +218,7 @@ elif selected =="Días de estadia":
             height=700,
             orientation="v",
             barmode="group")
-            fig_1.update_layout(title="Días de estadia y pacientes intervenidos por mes")
-
-           
+            fig_1.update_layout(title="Días de estadia y pacientes intervenidos por mes")         
 
             st.plotly_chart(fig_1, use_container_width=True)
             
@@ -232,8 +228,6 @@ elif selected =="Días de estadia":
         
         datos_2 = pd.read_excel("datos/datos_dias_estada.xlsx",sheet_name="Hoja1",usecols="A,B,C,D,I",skiprows=0,nrows=168,header=0)
 
-        
-
         col_report_1,col_report_2=st.columns([4,2],gap="small")  
             
         with col_report_2:
@@ -242,7 +236,6 @@ elif selected =="Días de estadia":
                                                     "abril","mayo","junio","julio",
                                                     "agosto","septiembre","octubre",
                                                     "noviembre","diciembre"))
-
                 
             st.metric(label="Promedio porcentaje de ocupación de quirófanos",value="60%",label_visibility="visible")  
             st.metric(label="Horas programadas respecto a las habilidades",value="79%")  
