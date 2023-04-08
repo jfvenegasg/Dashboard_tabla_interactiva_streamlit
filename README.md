@@ -1,10 +1,11 @@
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/streamlit/example-app-interactive-table/main)
+# app_health_r_medicine
 
-# 🖱️ Aplicacion de tabla interactiva
+<img src="hcm.png" width="200"/>
 
-Esta app muestra como puedes usar el componente [streamlit-aggrid](STREAMLIT_AGGRID_URL)
-    de Streamlit de forma interactiva de acuerdo a lo que el usuario seleccione.
+El siguiente dashboard es una replica del dashboard desarrollado en R Studio con la libreria shiny y expone algunos de los datos,información y metricas mas relevantes para el equipo quirurgico del Hospital Clinico de Magallanes
+
+A continuación se muestra el link de acceso a una previsualización del dashboard.
     
-<img src ="imagen_inicio.png" width="400px"></img>
+
 
 .
