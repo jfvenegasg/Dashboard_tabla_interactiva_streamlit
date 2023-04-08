@@ -1,6 +1,6 @@
 import pandas as pd
 import streamlit as st
-import streamlit_echarts as ste
+#import streamlit_echarts as ste
 from st_aggrid import AgGrid, GridOptionsBuilder
 from st_aggrid.shared import GridUpdateMode
 from streamlit_option_menu import option_menu
@@ -75,16 +75,16 @@ elif selected =="Suspensiones por causa":
             de Streamlit de forma interactiva de acuerdo a lo que el usuario seleccione."""
         )
 
-        option = {
-            "xAxis": {
-                "type": "category",
-                "data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            },
-            "yAxis": {"type": "value"},
-            "series": [{"data": [820, 932, 901, 934, 1290, 1330, 1320], "type": "line"}],
-        }
-        ste.st_echarts(key=2,
-            options=option, height="400px")
+        #option = {
+        #    "xAxis": {
+        #        "type": "category",
+        #        "data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        #    },
+        #    "yAxis": {"type": "value"},
+        #    "series": [{"data": [820, 932, 901, 934, 1290, 1330, 1320], "type": "line"}],
+        #}
+        #ste.st_echarts(key=2,
+        #    options=option, height="400px")
 
         st.write("Prueba y haz click sobre cualquier fila de la tabla")
 
@@ -203,10 +203,13 @@ elif selected =="Días de estadia":
                                                     "OFTALMOLOGÍA","OBSTETRICIA Y GINECOLOGÍA","GINECOLOGÍA",
                                                     "UROLOGÍA","RESTO ESPECIALIDADES","TODAS"))
 
-                
-            st.metric(label="Promedio porcentaje de ocupación de quirófanos",value="60%",label_visibility="visible")  
-            st.metric(label="Horas programadas respecto a las habilidades",value="79%")  
-            st.metric(label="Horas ocupadas respecto a las programadas",value="80%")
+            dias_totales=sum(datos_1[(datos_1['Especialidad']==selector_1)].iloc[:,3])    
+            pac_int_totales=sum(datos_1[(datos_1['Especialidad']==selector_1)].iloc[:,4])
+            dias_prom_pac=round(sum(datos_1[(datos_1['Especialidad']==selector_1)].iloc[:,2])/len(datos_1[(datos_1['Especialidad']=="CIRUGÍA GENERAL")].iloc[:,2]),2)
+
+            st.metric(label="Días totales de estadia",value=dias_totales,label_visibility="visible")  
+            st.metric(label="Pacientes intervenidos totales",value=pac_int_totales)  
+            st.metric(label="Días de estadía promedio por paciente",value=dias_prom_pac)
         
         with col_report_1:
             datos_1 = datos_1[(datos_1['Especialidad']==selector_1)]         
@@ -237,9 +240,13 @@ elif selected =="Días de estadia":
                                                     "agosto","septiembre","octubre",
                                                     "noviembre","diciembre"))
                 
-            st.metric(label="Promedio porcentaje de ocupación de quirófanos",value="60%",label_visibility="visible")  
-            st.metric(label="Horas programadas respecto a las habilidades",value="79%")  
-            st.metric(label="Horas ocupadas respecto a las programadas",value="80%")
+            dias_totales=sum(datos_2[(datos_2['Mes']==selector_2)].iloc[:,3])    
+            pac_int_totales=sum(datos_2[(datos_2['Mes']==selector_2)].iloc[:,4])
+            dias_prom_pac=round(sum(datos_2[(datos_2['Mes']==selector_2)].iloc[:,2])/len(datos_2[(datos_2['Mes']==selector_2)].iloc[:,2]),2)
+
+            st.metric(label="Días totales de estadia",value=dias_totales,label_visibility="visible")  
+            st.metric(label="Pacientes intervenidos totales",value=pac_int_totales)  
+            st.metric(label="Días de estadía promedio por paciente",value=dias_prom_pac)
             
                
             
