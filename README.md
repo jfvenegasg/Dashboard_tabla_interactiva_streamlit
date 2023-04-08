@@ -1,4 +1,4 @@
-# app_health_r_medicine
+# Dashboard para R|Medicine desarrollado con Streamlit
 
 <img src="hcm.png" width="200"/>
 
