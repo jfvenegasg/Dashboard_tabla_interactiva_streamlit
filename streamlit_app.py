@@ -8,6 +8,18 @@ import streamlit_nested_layout as stn
 import plotly.express as px
 from streamlit_elements import elements, mui, html
 import hydralit_components as hc
+import plotly.graph_objects as go
+import holoviews as hv
+from plotly.subplots import make_subplots
+import sys
+sys.path.append("modulos/suspensiones_por_causa")
+sys.path.append("modulos/suspensiones_por_especialidad")
+sys.path.append("modulos/reporte_quirofanos")
+sys.path.append("modulos/hospitalizacion_domiciliaria")
+sys.path.append("modulos/dias_de_estadia")
+
+import grafico_sankey, grafico_barras, grafico_de_barra, grafico_barra_hosp_dom, grafico_barras_apil_mes
+import grafico_barras_apil_espe, pareto_1,pareto_2,pareto_3,circular_1,circular_2,grafico_barra
 
 st.set_page_config(layout = "wide")
 # 1. as sidebar menu
@@ -37,24 +49,13 @@ if selected == "Inicio":
             st.button(label="Dias de estadia")
     
 elif selected =="Reporte quirófanos":
-    
-    datos = pd.read_excel("datos/set_de_datos_1.xlsx",sheet_name="Horas",usecols="E:G",skiprows=14,nrows=22,header=0,names=["Mes","Tipo de Hora","Valor"])
-    
-
-    fig = px.bar(
-    datos,
-    x="Mes",
-    y="Valor",
-    height=700,
-    orientation="v")
-    fig.update_layout(title="Utilización de quirofanos")
-    
+      
     col_report_1,col_report_2=st.columns([4,2],gap="small")  
     
     with col_report_1:
        
         #ste.st_echarts(key=1,options=option, height="400px")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(grafico_de_barra.fig, use_container_width=True)
 
  
              
@@ -65,120 +66,81 @@ elif selected =="Reporte quirófanos":
 
 elif selected =="Suspensiones por causa":
 
-    col1,col2=st.columns(2,gap="small")    
-    with col1:
+    with st.empty():
+        col1,col2=st.columns([4,1],gap="small")    
+        with col1:
 
-        STREAMLIT_AGGRID_URL = "https://github.com/PablocFonseca/streamlit-aggrid"
-        st.title("🖱️ Columna 1")
-        st.write(
-            """ Esta app muestra como puedes usar el componente [streamlit-aggrid](STREAMLIT_AGGRID_URL)
-            de Streamlit de forma interactiva de acuerdo a lo que el usuario seleccione."""
-        )
+                    
+            st.write("Motivos de suspensión por mes")
+                       
+            
+            st.plotly_chart(grafico_barras.fig, use_container_width=True)
 
-        #option = {
-        #    "xAxis": {
-        #        "type": "category",
-        #        "data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        #    },
-        #    "yAxis": {"type": "value"},
-        #    "series": [{"data": [820, 932, 901, 934, 1290, 1330, 1320], "type": "line"}],
-        #}
-        #ste.st_echarts(key=2,
-        #    options=option, height="400px")
+        with col2:
 
-        st.write("Prueba y haz click sobre cualquier fila de la tabla")
+            st.metric(label="Suspensiones debido a la causal paciente",value="42%",label_visibility="visible")  
+            st.metric(label="Suspensiones debido a la causal equipo quirurgico",value="23%") 
 
+    with st.empty():
+        
+        #Mostrar el gráfico
+        st.plotly_chart(grafico_sankey.fig, use_container_width=True)
 
-        def aggrid_interactive_table(df: pd.DataFrame):
-            """Creates an st-aggrid interactive table based on a dataframe.
+    with st.empty():
 
-            Args:
-                df (pd.DataFrame]): Source dataframe
+        col_1,col_2=st.columns([1,1])
 
-            Returns:
-                dict: The selected row
-            """
-            options = GridOptionsBuilder.from_dataframe(
-                df, enableRowGroup=True, enableValue=True, enablePivot=True
-            )
+        with col_1:
+            datos = pd.read_excel("datos/datos_suspensiones_bd.xlsx",sheet_name="Sheet1",usecols="A:D",skiprows=0,nrows=146,header=0)
+            
+            
 
-            options.configure_side_bar()
+            # Mostramos la figura
+            st.plotly_chart(pareto_1.grafico(datos), use_container_width=True)
 
-            options.configure_selection("single")
-            selection = AgGrid(
-                df,
-                enable_enterprise_modules=True,
-                gridOptions=options.build(),
-                theme="alpine",
-                update_mode=GridUpdateMode.MODEL_CHANGED,
-                allow_unsafe_jscode=True,
-            )
+        with col_2:
 
-            return selection
+            datos = pd.read_excel("datos/datos_suspensiones_bd.xlsx",sheet_name="Sheet1",usecols="A:D",skiprows=0,nrows=146,header=0)
 
+            
 
-        iris = pd.read_excel("datos_suspensiones_sankey_bd.xlsx")
+            # Mostramos la figura
+            st.plotly_chart(pareto_2.grafico(datos), use_container_width=True)
 
-        selection = aggrid_interactive_table(df=iris)
+    with st.empty():
+            datos = pd.read_excel("datos/datos_suspensiones_sankey_bd.xlsx",sheet_name="Sheet1",usecols="A:D",skiprows=0,nrows=35,header=0)
+    
 
-        if selection:
-            st.write("Has seleccionado la siguiente seccion:")
-            st.json(selection["selected_rows"])
+            # Mostramos la figura
+            st.plotly_chart(pareto_3.grafico(datos), use_container_width=True)
 
-        st.write("## Code")
-
-    with col2:
-
-        STREAMLIT_AGGRID_URL = "https://github.com/PablocFonseca/streamlit-aggrid"
-        #st.set_page_config(
-        #    layout="centered", page_icon="🖱️", page_title="Interactive table app"   
-        #)
-        st.title("🖱️ Columna 2")
-        st.write(
-            """ Esta app muestra como puedes usar el componente [streamlit-aggrid](STREAMLIT_AGGRID_URL)
-            de Streamlit de forma interactiva de acuerdo a lo que el usuario seleccione."""
-        )
-
-        option = {
-            "xAxis": {
-                "type": "category",
-                "data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            },
-            "yAxis": {"type": "value"},
-            "series": [{"data": [820, 932, 901, 934, 1290, 1330, 1320], "type": "line"}],
-        }
-        ste.st_echarts(key=3,
-            options=option, height="400px")
-               
-elif selected =="Suspensiones por Especialidad":
-    col1, col2, col3 = st.columns(3)
-
+elif selected =="Suspensiones por especialidad":
+    
+    with st.empty():
+        col_report_1,col_report_2=st.columns([1,1],gap="small")  
+    
+        with col_report_1:
+            st.write("Motivos de suspensión por mes")
+        
+        
+            st.plotly_chart(circular_1.fig, use_container_width=True)
+        with col_report_2:
+            st.write("Motivos de suspensión por mes")
+        
+        
+            st.plotly_chart(circular_2.fig, use_container_width=True)
+    with st.empty():
+            st.plotly_chart(grafico_barra.fig, use_container_width=True)
 
 elif selected =="Hospitalización domiciliaria":
-    
-    
-
-    datos = pd.read_excel("datos/datos_hospitalizacion_domiciliaria.xlsx",sheet_name="Sheet1",usecols="A:C",skiprows=0,nrows=12,header=0)
-    
-
-    fig = px.bar(
-    datos,
-    x="Componentes",
-    y=["Número cupos programados","Número cupos utilizados"],
-    height=700,
-    orientation="v",
-    barmode="group")
-    fig.update_layout(title="Hospitalización domiciliaria")
-    
+          
     col_report_1,col_report_2=st.columns([4,2],gap="small")  
     
     with col_report_1:
        
         #ste.st_echarts(key=1,options=option, height="400px")
-        st.plotly_chart(fig, use_container_width=True)
-
- 
-             
+        st.plotly_chart(grafico_barra_hosp_dom.fig, use_container_width=True)
+       
     with col_report_2:
         st.metric(label="Promedio porcentaje de ocupación de quirófanos",value="60%",label_visibility="visible")  
         st.metric(label="Horas programadas respecto a las habilidades",value="79%")  
@@ -213,17 +175,8 @@ elif selected =="Días de estadia":
         
         with col_report_1:
             datos_1 = datos_1[(datos_1['Especialidad']==selector_1)]         
-
-            fig_1 = px.bar(
-            datos_1,
-            x="Mes",
-            y=["Dias de estada prequirurgicos totales","Pacientes intervenidos totales,"],
-            height=700,
-            orientation="v",
-            barmode="group")
-            fig_1.update_layout(title="Días de estadia y pacientes intervenidos por mes")         
-
-            st.plotly_chart(fig_1, use_container_width=True)
+            
+            st.plotly_chart(grafico_barras_apil_mes.grafico(datos_1), use_container_width=True)
             
             
     with st.empty():
@@ -255,17 +208,8 @@ elif selected =="Días de estadia":
 
         datos_2 = datos_2[(datos_2['Mes']==selector_2)]
 
-        fig_2 = px.bar(
-        datos_2,
-        x="Especialidad",
-        y=["Dias de estada prequirurgicos totales","Pacientes intervenidos totales,"],
-        height=700,
-        orientation="v",
-        barmode="group")
-        fig_2.update_layout(title="Días de estadia y pacientes intervenidos por mes")
-
-       
-        st.plotly_chart(fig_2, use_container_width=True)
+               
+        st.plotly_chart(grafico_barras_apil_espe.grafico(datos_2),use_container_width=True)
             
 
 else:
