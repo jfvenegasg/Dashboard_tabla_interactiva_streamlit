@@ -22,14 +22,45 @@ sys.path.append("modulos/dias_de_estadia")
 import grafico_sankey, grafico_barras, grafico_de_barra, grafico_barra_hosp_dom, grafico_barras_apil_mes
 import grafico_barras_apil_espe, pareto_1,pareto_2,pareto_3,circular_1,circular_2,grafico_barra
 
-st.set_page_config(layout = "wide")
-# 1. as sidebar menu
-with st.sidebar:
-    selected = option_menu("Sistema de gestión HCM", ["Inicio","Reporte quirófanos", "Suspensiones por causa","Suspensiones por especialidad","Hospitalización domiciliaria","Días de estadia"], 
-        icons=['house', 'person-rolodex','person-badge-fill','person-badge-fill','file-earmark-medical','file-earmark-medical'], menu_icon="cast", default_index=0)
-    selected
+app=hy.HydraApp(title="App")
 
-if selected == "Inicio":
+#st.set_page_config(layout = "wide")
+#with app.sidebar:
+#    app.sidebar.header('Opciones')
+#    opcion1 = app.sidebar.checkbox('Inicio', value=True)
+#    opcion2 = app.sidebar.checkbox('Reporte quirófanos')
+#    opcion3 = app.sidebar.checkbox('Suspensiones por causa')
+#    opcion4 = app.sidebar.checkbox('Suspensiones por especialidad')
+#    opcion5 = app.sidebar.checkbox('Hospitalizacion domiciliaria')
+#    opcion6 = app.sidebar.checkbox('Dias de estadia')
+#st.set_page_config(layout='wide',initial_sidebar_state='collapsed')
+
+# specify the primary menu definition
+#menu_data = [
+#    {'icon': "far fa-copy", 'label':"Left End"},
+#    {'id':'Copy','icon':"🐙",'label':"Copy"},
+#    {'icon': "fa-solid fa-radar",'label':"Dropdown1", 'submenu':[{'id':' subid11','icon': "fa fa-paperclip", 'label':"Sub-item 1"},{'id':'subid12','icon': "💀", 'label':"Sub-item 2"},{'id':'subid13','icon': "fa fa-database", 'label':"Sub-item 3"}]},
+#    {'icon': "far fa-chart-bar", 'label':"Chart"},#no tooltip message
+#    {'id':' Crazy return value 💀','icon': "💀", 'label':"Calendar"},
+#    {'icon': "fas fa-tachometer-alt", 'label':"Dashboard",'ttip':"I'm the Dashboard tooltip!"}, #can add a tooltip message
+#    {'icon': "far fa-copy", 'label':"Right End"},
+#    {'icon': "fa-solid fa-radar",'label':"Dropdown2", 'submenu':[{'label':"Sub-item 1", 'icon': "fa fa-meh"},{'label':"Sub-item 2"},{'icon':'🙉','label':"Sub-item 3",}]},
+#]
+
+#over_theme = {'txc_inactive': '#FFFFFF'}
+#menu_id = hc.nav_bar(
+#    menu_definition=menu_data,
+#    override_theme=over_theme,
+#    home_name='Home',
+#    login_name='Logout',
+#    hide_streamlit_markers=False, #will show the st hamburger as well as the navbar now!
+#    sticky_nav=True, #at the top or not
+#    sticky_mode='pinned', #jumpy or not-jumpy, but sticky or pinned
+#)
+
+@app.addapp(title="Inicio")
+def mod1():
+#if selected == "Inicio":
      
  
     
@@ -48,8 +79,11 @@ if selected == "Inicio":
     with col_inicio_2:
             st.button(label="Hospitalización domiciliaria")
             st.button(label="Dias de estadia")
-    
-elif selected =="Reporte quirófanos":
+
+@app.addapp(title="Reporte quirófanos")
+def mod2():
+
+#elif selected =="Reporte quirófanos":
       
     col_report_1,col_report_2=st.columns([4,2],gap="small")  
     
@@ -65,7 +99,9 @@ elif selected =="Reporte quirófanos":
         st.metric(label="Horas programadas respecto a las habilidades",value="79%")  
         st.metric(label="Horas ocupadas respecto a las programadas",value="80%")  
 
-elif selected =="Suspensiones por causa":
+@app.addapp(title="Suspensiones por causa")
+def mod3():
+#elif selected =="Suspensiones por causa":
 
     with st.empty():
         col1,col2=st.columns([4,1],gap="small")    
@@ -115,7 +151,9 @@ elif selected =="Suspensiones por causa":
             # Mostramos la figura
             st.plotly_chart(pareto_3.grafico(datos), use_container_width=True)
 
-elif selected =="Suspensiones por especialidad":
+@app.addapp(title="Suspensiones por especialidad")
+def mod4():
+#elif selected =="Suspensiones por especialidad":
     
     with st.empty():
         col_report_1,col_report_2=st.columns([1,1],gap="small")  
@@ -133,7 +171,9 @@ elif selected =="Suspensiones por especialidad":
     with st.empty():
             st.plotly_chart(grafico_barra.fig, use_container_width=True)
 
-elif selected =="Hospitalización domiciliaria":
+@app.addapp(title="Hospitalización domiciliaria")
+def mod5():
+#elif selected =="Hospitalización domiciliaria":
           
     col_report_1,col_report_2=st.columns([4,2],gap="small")  
     
@@ -147,7 +187,10 @@ elif selected =="Hospitalización domiciliaria":
         st.metric(label="Horas programadas respecto a las habilidades",value="79%")  
         st.metric(label="Horas ocupadas respecto a las programadas",value="80%")  
 
-elif selected =="Días de estadia":
+@app.addapp(title="Días de estadia")
+def mod6():
+
+#elif selected =="Días de estadia":
     with st.container():
     
         with st.empty():
@@ -213,6 +256,4 @@ elif selected =="Días de estadia":
                 
             st.plotly_chart(grafico_barras_apil_espe.grafico(datos_2),use_container_width=True)
                 
-
-else:
-    col1, col2, col3 = st.columns(3)
+app.run()
